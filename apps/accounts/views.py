@@ -52,9 +52,9 @@ def dashboard(request):
     """User dashboard view based on role"""
     
     if request.user.is_teacher:
-        return render(request, 'accounts/teacher_dashboard.html')
+        return redirect('course_list')
     else:
-        return render(request, 'accounts/student_dashboard.html')
+        return redirect('scanner')
 
 
 @login_required

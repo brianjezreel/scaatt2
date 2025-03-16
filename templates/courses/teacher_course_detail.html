@@ -48,8 +48,12 @@
                             </div>
                             <div class="card-body">
                                 <p><strong>Students:</strong> {{ enrollments|length }}</p>
-                                <p><strong>Sessions:</strong> 0</p>
+                                <p><strong>Sessions:</strong> {{ session_count }}</p>
+                                {% if recent_sessions %}
+                                <p><strong>Last Session:</strong> {{ recent_sessions.0.date|date:"F j, Y" }}</p>
+                                {% else %}
                                 <p><strong>Last Session:</strong> N/A</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -87,10 +91,19 @@
                     </div>
                 {% endif %}
                 
-                <h5 class="mt-4">Recent Sessions</h5>
-                <div class="alert alert-info">
-                    No sessions have been created for this course yet.
-                    <a href="{% url 'create_session' course.id %}" class="btn btn-primary btn-sm mt-2">Create First Session</a>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <h5>Sessions</h5>
+                    <div>
+                        <a href="{% url 'session_list' course.id %}" class="btn btn-primary">
+                            <i class="bi bi-list"></i> View Sessions
+                        </a>
+                        <a href="{% url 'create_session' course.id %}" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Create Session
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <p>Total Sessions: {{ session_count }}</p>
                 </div>
             </div>
         </div>

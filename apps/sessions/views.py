@@ -301,3 +301,31 @@ def reopen_session(request, course_id, session_id):
     
     # If not POST, redirect to session detail
     return redirect('session_detail', course_id=course.id, session_id=session.id)
+
+
+@login_required
+def all_sessions(request):
+    """Display all sessions across all courses for a teacher"""
+    
+    # Only teachers can access this view
+    if not request.user.is_teacher:
+        return HttpResponseForbidden("You don't have permission to view this page.")
+    
+    # Get all courses taught by this teacher
+    courses = Course.objects.filter(teacher=request.user)
+    
+    # Get all sessions for these courses
+    sessions = Session.objects.filter(course__in=courses).order_by('-date', '-start_time')
+    
+    # Group sessions by status
+    upcoming_sessions = [s for s in sessions if s.is_upcoming]
+    active_sessions = [s for s in sessions if s.is_active]
+    past_sessions = [s for s in sessions if s.is_past]
+    
+    context = {
+        'upcoming_sessions': upcoming_sessions,
+        'active_sessions': active_sessions,
+        'past_sessions': past_sessions,
+    }
+    
+    return render(request, 'sessions/all_sessions.html', context)
