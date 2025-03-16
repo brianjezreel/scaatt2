@@ -25,7 +25,7 @@ def generate_qr_code_data(session_id, token, expiry_time):
 def generate_qr_code_url(session_id, token):
     """Generate a URL for the QR code that can be scanned by students"""
     attendance_url = reverse('mark_attendance', args=[session_id, token])
-    base_url = getattr(settings, 'BASE_URL', 'http://localhost:8000')
+    base_url = getattr(settings, 'BASE_URL', 'https://web-production-10be.up.railway.app')
     return f"{base_url}{attendance_url}"
 
 
